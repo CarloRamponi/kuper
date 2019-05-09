@@ -1,0 +1,96 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+%opening
+\title{Linguaggi di programmazione modulo 2\\Teoria}
+\author{Carlo Ramponi}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\section*{Lamda Calcolo}
+\paragraph{Introduzione\\}
+In ML: $fn \  x => e$, in lamda calcolo: $\lambda x.e$\\
+Serve per formalizzare quello detto fin'ora sulla programmazione funzionale.\\
+È stata inventata molto prima per studiare la computabilità!
+
+\paragraph{Definizione formale\\}
+Un' \textbf{espressione} nel lamda calcolo è un nome, una funzione o un' applicazione di espressioni a espressioni\\
+\begin{itemize}
+	\item \textbf{Funzione:} $\lambda nome.espressione$
+	\item \textbf{Applicazione:} $espressione_{1} \ espressione_{2}$\\
+	Dove $espressione$ è:
+	\begin{itemize}
+		\item $x$ $\rightarrow$ Un identificatore (variabile o costante)
+		\item $\lambda x.e$ $\rightarrow$ Un'altra funzione
+		\item $e \ e$ $\rightarrow$ Una generica espressione
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Variabili libere e variabili legate\\}
+\textbf{Def.} Una variabile libera all'interno di un'espressione $e$ è una variabile alla quale non è ancora stato assegnato un valore.\\
+$F_{v}(e) \rightarrow$ "variabili libere nell'espressione $e$"\\
+\textbf{Def.} Una variabile legata all'interno di un'espressione $e$ è una variabile alla quale è stato assegnato un valore (una funzione o un'altra espressione)\\
+$B_{v}(e) \rightarrow$ "variabili legate nell'espressione $e$"\\
+\\\textbf{Conseguenze\\}
+\begin{itemize}
+	\item $F_{v}(\lambda x.e) = F_{v}(e) \setminus \{x\}$
+	\item $B_{v}(\lambda x.e) = B_{v}(e) \cup \{x\}$
+\end{itemize}
+L'operatore $\lambda x.e$ rimuove una variabile libera dall'espressione $e$ e la aggiunge a quelle legate
+
+\paragraph{Sostituzione\\}
+Nel lamda calcolo è possibile sostituire un identificatore con un altra espressione, \[e[e'/x]\] significa sostituire nell'espressione $e$ tutte le occorrenze della $x$ con $e'$, che potrebbe essere un'altra espressione.\\
+Il risultato della sostituzione si indica con $"\rightarrow"$\\
+\textbf{\\Conseguenze banali:}
+\begin{itemize}
+	\item Se $x$ è un identificatore, allora $x[e'/x] = e'$
+	\item Se $x \neq y$, allora $y[e'/x] = y$
+\end{itemize}
+
+\paragraph{Applicazione:} \[ (e_{1} \ e_{2})[e' / x] = (e_{1}[e'/x] \ e_{2}[e'/x]) \]
+\paragraph{Astrazione:}
+\begin{itemize}
+	\item Se $x \neq y$ e $y \notin F_{v}(e')$, allora $(\lambda y.e)[e'/x] = (\lambda y.e[e'/x])$
+	\item Se $x = y$, allora $(\lambda y.e)[z/x] = (\lambda y.e)$
+\end{itemize}
+
+\paragraph{Equivalenza di espressioni\\}
+\begin{itemize}
+	\item Date due espressioni $e_{1}$ ed $e_{2}$, quando si possono dichiarare equivalenti?\\
+	Quando differiscono solo per il nome di variabili legate!
+	\item Se $y$ non è presente in $e$, \[ \lambda x.e \equiv \lambda y.e[y/x] \]
+	\item Questa relaz. di equivalenza si chiama $\alpha$-equivalenza e si indica con $\equiv_{\alpha}$
+	\item Due espressioni si dicono $\alpha$-quivalenti se una si può ottenere dall'altra sostituendo parte della prima con una $\alpha$-equivalente
+\end{itemize}
+
+\paragraph{$\beta$-equivalenza\\}
+Intuitivamente, significa valutare le funzioni in un'espressione, formalmente \[ (\lambda x.e)e' \rightarrow_{\beta} e[e'/x] \]
+\textbf{Terminologia:}
+\begin{itemize}
+	\item $ (\lambda x.e)e'$ è un "redex" (espressione riducibile)
+	\item Si riduce a $e[e'/x]$
+\end{itemize}
+\textbf{Osservazione: } le $\beta$-riduzioni non sono simmetriche \[(e_{1} \rightarrow_{\beta} e_{2}) \not\Rightarrow (e_{2} \rightarrow_{\beta} e_{1}) \]
+Quindi non è una relazione di equivalenza.\\
+Informalmente, $e_{1} =_{\beta} e_{2}$ significca che esiste una sequenza di $\beta$-riduzioni da $e_{1}$ a $e_{2}$
+
+\paragraph{Forme Normali\\}
+Un'espressione che n on contiene redex non ha $\beta$-riduzioni.
+\begin{itemize}
+	\item Questa è chiamata "forma normale"
+	\item $\lambda x.\lambda y.x$ è una forma normale
+	\item $\lambda x.(\lambda y.y)x$ non è in forma normale, perchè:\\
+		$(\lambda y.y)x \rightarrow_{\beta} x$ quindi $\lambda x.(\lambda y.y)x \rightarrow_{\beta} \lambda x.x$
+	\item Le $\beta$-riduzioni possono terminare in una forma normale.
+	\item O potrebbero andare avanti per sempre (come la ricorsione infinita o cicli infiniti):
+		\[ (\lambda x.xx)(\lambda x.xx) \rightarrow_{\beta} (xx)[\lambda x.xx / x] = (\lambda x.xx)(\lambda x.xx) \]
+\end{itemize}
+
+\paragraph{Confluenza(?)\\}
+\textbf{Teorema} Se $e$ può essere ridotto a $e_{1}$ con una $\beta$-riduzione e $e$ può essere ridotto a $e_{2}$ con una $\beta$-riduzione, allora esiste un'espressione $e_{3}$ tale che sia $e_{1}$ che $e_{2}$ possono essere ridotte a $e_{3}$ con una $\beta$-riduzione.\\
+Ciò significa che se $e$ può essere ridotto ad una forma normale allora l'ordine delle riduzioni non importa.
+\end{document}
