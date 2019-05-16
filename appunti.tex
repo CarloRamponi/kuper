@@ -93,4 +93,26 @@ Un'espressione che n on contiene redex non ha $\beta$-riduzioni.
 \paragraph{Confluenza(?)\\}
 \textbf{Teorema} Se $e$ può essere ridotto a $e_{1}$ con una $\beta$-riduzione e $e$ può essere ridotto a $e_{2}$ con una $\beta$-riduzione, allora esiste un'espressione $e_{3}$ tale che sia $e_{1}$ che $e_{2}$ possono essere ridotte a $e_{3}$ con una $\beta$-riduzione.\\
 Ciò significa che se $e$ può essere ridotto ad una forma normale allora l'ordine delle riduzioni non importa.
+
+\paragraph{Codifica dei Naturali\\}
+Definizione basata sugli assiomi di Peano:
+\begin{itemize}
+	\item $0$ è un naturale
+	\item Se $n$ è naturale, il successivo di $n$ ($succ(n)$) è anch'esso un naturale
+\end{itemize}
+Church ha fatto qualcosa di simile:
+\begin{itemize}
+	\item $0$ è codificato come $\lambda f.\lambda x.x$ (funzione $f$ applicata $0$ volte a $x$)
+	\item $succ(n)$: applica $f$ ad $n$
+\end{itemize}
+In pratica $0 = f$ applicata $0$ volte, $1 = f$ applicata $1$ volta, ..., $n = f$ applicata $n$ volte.\\
+Formalmente: $succ(n) = \lambda n.\lambda f.\lambda x.f((nf)x)$\\
+
+\paragraph{Estensione a $\lambda$ Calcolo\\}
+Con le stesse tecniche si possono codificare la somma o condizioni più complicate come if ... then ...,\\
+quindi possiamo abusare lievemente della notazione introducendo numeri naturali, operazioni e quant'altro serve nelle espressioni, poichè siamo a conoscenza di come esse si codificano.\\
+Es. $\lambda x.(x+2)$ oppure $\lambda x.(if\ x = 1\ then\ 0\ else\ 1)$\\
+
+
+
 \end{document}
